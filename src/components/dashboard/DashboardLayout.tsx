@@ -15,12 +15,12 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const navigation = [
-  { name: 'Dashboard', href: '#', icon: LayoutDashboard, current: true },
-  { name: 'Customers', href: '#', icon: Users, current: false },
-  { name: 'Products', href: '#', icon: Package, current: false },
-  { name: 'Reports', href: '#', icon: FileText, current: false },
-  { name: 'Analytics', href: '#', icon: BarChart3, current: false },
-  { name: 'Settings', href: '#', icon: Settings, current: false },
+  { name: 'Dashboard', href: '/', icon: LayoutDashboard, current: true },
+  { name: 'Customers', href: '/customers', icon: Users, current: false },
+  { name: 'Products', href: '/products', icon: Package, current: false },
+  { name: 'Reports', href: '/reports', icon: FileText, current: false },
+  { name: 'Analytics', href: '/dashboard', icon: BarChart3, current: false },
+  { name: 'Settings', href: '/settings', icon: Settings, current: false },
 ];
 
 interface DashboardLayoutProps {
@@ -76,7 +76,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   className={`
                     flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium
                     transition-colors duration-200 group
-                    ${item.current 
+                    ${window.location.pathname === item.href 
                       ? 'bg-sidebar-accent text-sidebar-accent-foreground border-l-2 border-sidebar-primary' 
                       : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                     }
@@ -84,7 +84,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 >
                   <Icon className={`
                     w-5 h-5 transition-colors duration-200
-                    ${item.current ? 'text-sidebar-primary' : 'group-hover:text-sidebar-primary'}
+                    ${window.location.pathname === item.href ? 'text-sidebar-primary' : 'group-hover:text-sidebar-primary'}
                   `} />
                   <span>{item.name}</span>
                 </a>
