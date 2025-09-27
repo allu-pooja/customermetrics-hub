@@ -1,26 +1,28 @@
-import { useState } from 'react';
-import { 
-  BarChart3, 
-  Users, 
-  Package, 
-  FileText, 
-  Settings, 
+import { useState } from "react";
+import {
+  BarChart3,
+  Users,
+  Package,
+  FileText,
+  Settings,
   LayoutDashboard,
   Bell,
   User,
   Menu,
-  X
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+  X,
+  Upload,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: LayoutDashboard, current: true },
-  { name: 'Customers', href: '/customers', icon: Users, current: false },
-  { name: 'Products', href: '/products', icon: Package, current: false },
-  { name: 'Reports', href: '/reports', icon: FileText, current: false },
-  { name: 'Analytics', href: '/dashboard', icon: BarChart3, current: false },
-  { name: 'Settings', href: '/settings', icon: Settings, current: false },
+  { name: "Dashboard", href: "/", icon: LayoutDashboard, current: true },
+  { name: "Customers", href: "/customers", icon: Users, current: false },
+  { name: "Products", href: "/products", icon: Package, current: false },
+  { name: "Reports", href: "/reports", icon: FileText, current: false },
+  { name: "Analytics", href: "/dashboard", icon: BarChart3, current: false },
+  { name: "Data Upload", href: "/upload", icon: Upload, current: false },
+  { name: "Settings", href: "/settings", icon: Settings, current: false },
 ];
 
 interface DashboardLayoutProps {
@@ -34,18 +36,20 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     <div className="min-h-screen bg-background flex">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-50 lg:hidden bg-black/50 backdrop-blur-sm"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <div className={`
+      <div
+        className={`
         fixed lg:static inset-y-0 left-0 z-50 w-64 bg-sidebar border-r border-sidebar-border
         transform transition-transform duration-300 ease-in-out lg:translate-x-0
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+      `}
+      >
         <div className="flex h-full flex-col">
           {/* Logo */}
           <div className="flex items-center justify-between p-6 border-b border-sidebar-border">
@@ -53,7 +57,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center">
                 <BarChart3 className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="text-lg font-semibold gradient-text">ChurnIQ</span>
+              <span className="text-lg font-semibold gradient-text">
+                ChurnIQ
+              </span>
             </div>
             <Button
               variant="ghost"
@@ -76,16 +82,23 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   className={`
                     flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium
                     transition-colors duration-200 group
-                    ${window.location.pathname === item.href 
-                      ? 'bg-sidebar-accent text-sidebar-accent-foreground border-l-2 border-sidebar-primary' 
-                      : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+                    ${
+                      window.location.pathname === item.href
+                        ? "bg-sidebar-accent text-sidebar-accent-foreground border-l-2 border-sidebar-primary"
+                        : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                     }
                   `}
                 >
-                  <Icon className={`
+                  <Icon
+                    className={`
                     w-5 h-5 transition-colors duration-200
-                    ${window.location.pathname === item.href ? 'text-sidebar-primary' : 'group-hover:text-sidebar-primary'}
-                  `} />
+                    ${
+                      window.location.pathname === item.href
+                        ? "text-sidebar-primary"
+                        : "group-hover:text-sidebar-primary"
+                    }
+                  `}
+                  />
                   <span>{item.name}</span>
                 </a>
               );
@@ -127,7 +140,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 <Menu className="w-5 h-5" />
               </Button>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+                <h1 className="text-2xl font-bold text-foreground">
+                  Dashboard
+                </h1>
                 <p className="text-sm text-muted-foreground">
                   Customer Analytics & Churn Prediction
                 </p>
