@@ -33,7 +33,6 @@ const navigation = [
   { name: "Reports", href: "/reports", icon: FileText },
   { name: "Analytics", href: "/dashboard", icon: BarChart3 },
   { name: "Data Upload", href: "/upload", icon: Upload },
-  { name: "Settings", href: "/settings", icon: Settings },
 ];
 
 export function Navbar() {
@@ -131,10 +130,12 @@ export function Navbar() {
                   <User className="mr-2 h-4 w-4" />
                   <span>Profile</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
-                </DropdownMenuItem>
+                <Link to="/settings">
+                  <DropdownMenuItem>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Settings</span>
+                  </DropdownMenuItem>
+                </Link>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Log out</DropdownMenuItem>
               </DropdownMenuContent>
