@@ -1,25 +1,29 @@
-import { useState } from 'react';
-import { Calendar, Filter, RotateCcw } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Slider } from '@/components/ui/slider';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState } from "react";
+import { Calendar, Filter, RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function FilterPanel() {
   const [churnThreshold, setChurnThreshold] = useState([50]);
-  const [dateRange, setDateRange] = useState('last-30-days');
-  const [segment, setSegment] = useState('all');
-  const [region, setRegion] = useState('all');
-  const [productCategory, setProductCategory] = useState('all');
+  const [dateRange, setDateRange] = useState("last-30-days");
+  const [region, setRegion] = useState("all");
+  const [productCategory, setProductCategory] = useState("all");
 
   const handleReset = () => {
     setChurnThreshold([50]);
-    setDateRange('last-30-days');
-    setSegment('all');
-    setRegion('all');
-    setProductCategory('all');
+    setDateRange("last-30-days");
+    setRegion("all");
+    setProductCategory("all");
   };
 
   return (
@@ -36,7 +40,7 @@ export function FilterPanel() {
           </Button>
         </CardTitle>
       </CardHeader>
-      
+
       <CardContent className="space-y-6">
         {/* Date Range */}
         <div className="space-y-2">
@@ -53,23 +57,6 @@ export function FilterPanel() {
               <SelectItem value="last-6-months">Last 6 months</SelectItem>
               <SelectItem value="last-year">Last year</SelectItem>
               <SelectItem value="custom">Custom range</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Customer Segment */}
-        <div className="space-y-2">
-          <Label className="text-sm font-medium">Customer Segment</Label>
-          <Select value={segment} onValueChange={setSegment}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Segments</SelectItem>
-              <SelectItem value="premium">Premium</SelectItem>
-              <SelectItem value="standard">Standard</SelectItem>
-              <SelectItem value="basic">Basic</SelectItem>
-              <SelectItem value="enterprise">Enterprise</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -112,7 +99,9 @@ export function FilterPanel() {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <Label className="text-sm font-medium">Churn Risk Threshold</Label>
-            <span className="text-sm font-medium text-primary">{churnThreshold[0]}%</span>
+            <span className="text-sm font-medium text-primary">
+              {churnThreshold[0]}%
+            </span>
           </div>
           <div className="px-2">
             <Slider
@@ -131,13 +120,13 @@ export function FilterPanel() {
         </div>
 
         {/* Apply Filters Button */}
-        <Button className="w-full">
-          Apply Filters
-        </Button>
+        <Button className="w-full">Apply Filters</Button>
 
         {/* Quick Stats */}
         <div className="pt-4 border-t border-border">
-          <h4 className="text-sm font-medium text-foreground mb-3">Quick Stats</h4>
+          <h4 className="text-sm font-medium text-foreground mb-3">
+            Quick Stats
+          </h4>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Filtered Customers:</span>
