@@ -1,10 +1,16 @@
-import { useState } from 'react';
-import { Search, Filter, Download, Eye } from 'lucide-react';
-import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useState } from "react";
+import { Search, Filter, Download, Eye } from "lucide-react";
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -12,15 +18,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { useNavigate } from 'react-router-dom';
+} from "@/components/ui/table";
+import { useNavigate } from "react-router-dom";
 
 interface Customer {
   id: string;
   name: string;
   email: string;
   churnProbability: number;
-  riskScore: 'High' | 'Medium' | 'Low';
+  riskScore: "High" | "Medium" | "Low";
   segment: string;
   region: string;
   lastActivity: string;
@@ -29,90 +35,92 @@ interface Customer {
 
 const mockCustomers: Customer[] = [
   {
-    id: 'CUS001',
-    name: 'John Smith',
-    email: 'john.smith@email.com',
+    id: "CUS001",
+    name: "John Smith",
+    email: "john.smith@email.com",
     churnProbability: 0.87,
-    riskScore: 'High',
-    segment: 'Premium',
-    region: 'North America',
-    lastActivity: '2024-01-15',
-    totalSpent: 1240
+    riskScore: "High",
+    segment: "Premium",
+    region: "North America",
+    lastActivity: "2024-01-15",
+    totalSpent: 1240,
   },
   {
-    id: 'CUS002',
-    name: 'Sarah Johnson',
-    email: 'sarah.j@email.com',
+    id: "CUS002",
+    name: "Sarah Johnson",
+    email: "sarah.j@email.com",
     churnProbability: 0.72,
-    riskScore: 'High',
-    segment: 'Standard',
-    region: 'Europe',
-    lastActivity: '2024-01-10',
-    totalSpent: 890
+    riskScore: "High",
+    segment: "Standard",
+    region: "Europe",
+    lastActivity: "2024-01-10",
+    totalSpent: 890,
   },
   {
-    id: 'CUS003',
-    name: 'Mike Chen',
-    email: 'mike.chen@email.com',
+    id: "CUS003",
+    name: "Mike Chen",
+    email: "mike.chen@email.com",
     churnProbability: 0.45,
-    riskScore: 'Medium',
-    segment: 'Premium',
-    region: 'Asia',
-    lastActivity: '2024-01-20',
-    totalSpent: 2150
+    riskScore: "Medium",
+    segment: "Premium",
+    region: "Asia",
+    lastActivity: "2024-01-20",
+    totalSpent: 2150,
   },
   {
-    id: 'CUS004',
-    name: 'Emily Davis',
-    email: 'emily.davis@email.com',
+    id: "CUS004",
+    name: "Emily Davis",
+    email: "emily.davis@email.com",
     churnProbability: 0.23,
-    riskScore: 'Low',
-    segment: 'Premium',
-    region: 'North America',
-    lastActivity: '2024-01-25',
-    totalSpent: 3200
+    riskScore: "Low",
+    segment: "Premium",
+    region: "North America",
+    lastActivity: "2024-01-25",
+    totalSpent: 3200,
   },
   {
-    id: 'CUS005',
-    name: 'David Wilson',
-    email: 'david.w@email.com',
+    id: "CUS005",
+    name: "David Wilson",
+    email: "david.w@email.com",
     churnProbability: 0.68,
-    riskScore: 'High',
-    segment: 'Basic',
-    region: 'Europe',
-    lastActivity: '2024-01-05',
-    totalSpent: 567
-  }
+    riskScore: "High",
+    segment: "Basic",
+    region: "Europe",
+    lastActivity: "2024-01-05",
+    totalSpent: 567,
+  },
 ];
 
 export default function Customers() {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [riskFilter, setRiskFilter] = useState('all');
-  const [segmentFilter, setSegmentFilter] = useState('all');
-  const [regionFilter, setRegionFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [riskFilter, setRiskFilter] = useState("all");
+  const [regionFilter, setRegionFilter] = useState("all");
 
-  const filteredCustomers = mockCustomers.filter(customer => {
-    const matchesSearch = customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         customer.id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRisk = riskFilter === 'all' || customer.riskScore === riskFilter;
-    const matchesSegment = segmentFilter === 'all' || customer.segment === segmentFilter;
-    const matchesRegion = regionFilter === 'all' || customer.region === regionFilter;
+  const filteredCustomers = mockCustomers.filter((customer) => {
+    const matchesSearch =
+      customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.id.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRisk =
+      riskFilter === "all" || customer.riskScore === riskFilter;
 
-    return matchesSearch && matchesRisk && matchesSegment && matchesRegion;
+    const matchesRegion =
+      regionFilter === "all" || customer.region === regionFilter;
+
+    return matchesSearch && matchesRisk && matchesRegion;
   });
 
   const getRiskBadgeStyles = (risk: string) => {
     switch (risk) {
-      case 'High':
-        return 'bg-danger/10 text-danger border-danger/20';
-      case 'Medium':
-        return 'bg-warning/10 text-warning border-warning/20';
-      case 'Low':
-        return 'bg-success/10 text-success border-success/20';
+      case "High":
+        return "bg-danger/10 text-danger border-danger/20";
+      case "Medium":
+        return "bg-warning/10 text-warning border-warning/20";
+      case "Low":
+        return "bg-success/10 text-success border-success/20";
       default:
-        return '';
+        return "";
     }
   };
 
@@ -137,7 +145,7 @@ export default function Customers() {
               className="pl-10"
             />
           </div>
-          
+
           <Select value={riskFilter} onValueChange={setRiskFilter}>
             <SelectTrigger className="w-40">
               <SelectValue placeholder="Risk Level" />
@@ -147,18 +155,6 @@ export default function Customers() {
               <SelectItem value="High">High Risk</SelectItem>
               <SelectItem value="Medium">Medium Risk</SelectItem>
               <SelectItem value="Low">Low Risk</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select value={segmentFilter} onValueChange={setSegmentFilter}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Segment" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Segments</SelectItem>
-              <SelectItem value="Premium">Premium</SelectItem>
-              <SelectItem value="Standard">Standard</SelectItem>
-              <SelectItem value="Basic">Basic</SelectItem>
             </SelectContent>
           </Select>
 
@@ -178,7 +174,7 @@ export default function Customers() {
             <Filter className="w-4 h-4 mr-2" />
             More Filters
           </Button>
-          
+
           <Button variant="outline">
             <Download className="w-4 h-4 mr-2" />
             Export
@@ -206,16 +202,22 @@ export default function Customers() {
             </TableHeader>
             <TableBody>
               {filteredCustomers.map((customer) => (
-                <TableRow 
-                  key={customer.id} 
+                <TableRow
+                  key={customer.id}
                   className="hover:bg-muted/30 transition-colors cursor-pointer"
                   onClick={() => navigate(`/customer/${customer.id}`)}
                 >
                   <TableCell>
                     <div>
-                      <div className="font-medium text-foreground">{customer.name}</div>
-                      <div className="text-sm text-muted-foreground">{customer.email}</div>
-                      <div className="text-xs text-muted-foreground">{customer.id}</div>
+                      <div className="font-medium text-foreground">
+                        {customer.name}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {customer.email}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {customer.id}
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -227,10 +229,15 @@ export default function Customers() {
                         <div className="w-16 h-2 bg-muted rounded-full overflow-hidden">
                           <div
                             className={`h-full rounded-full ${
-                              customer.churnProbability > 0.7 ? 'bg-danger' :
-                              customer.churnProbability > 0.4 ? 'bg-warning' : 'bg-success'
+                              customer.churnProbability > 0.7
+                                ? "bg-danger"
+                                : customer.churnProbability > 0.4
+                                ? "bg-warning"
+                                : "bg-success"
                             }`}
-                            style={{ width: `${customer.churnProbability * 100}%` }}
+                            style={{
+                              width: `${customer.churnProbability * 100}%`,
+                            }}
                           />
                         </div>
                         <span className="text-sm font-medium">
@@ -249,11 +256,13 @@ export default function Customers() {
                     <span className="text-sm">{customer.lastActivity}</span>
                   </TableCell>
                   <TableCell>
-                    <span className="font-medium">${customer.totalSpent.toLocaleString()}</span>
+                    <span className="font-medium">
+                      ${customer.totalSpent.toLocaleString()}
+                    </span>
                   </TableCell>
                   <TableCell>
-                    <Button 
-                      variant="ghost" 
+                    <Button
+                      variant="ghost"
                       size="sm"
                       onClick={(e) => {
                         e.stopPropagation();

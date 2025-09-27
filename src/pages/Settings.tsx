@@ -1,24 +1,48 @@
-import { useState } from 'react';
-import { User, Bell, Shield, Palette, Database, Mail, Save, Download } from 'lucide-react';
-import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Separator } from '@/components/ui/separator';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useState } from "react";
+import {
+  User,
+  Bell,
+  Shield,
+  Palette,
+  Database,
+  Mail,
+  Save,
+  Download,
+} from "lucide-react";
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Settings() {
+  const { theme, setTheme } = useTheme();
+
   const [profile, setProfile] = useState({
-    name: 'Sarah Anderson',
-    email: 'sarah.anderson@company.com',
-    role: 'Data Analyst',
-    department: 'Analytics',
-    phone: '+1 (555) 123-4567',
-    bio: 'Experienced data analyst focused on customer insights and churn prediction.'
+    name: "Sarah Anderson",
+    email: "sarah.anderson@company.com",
+    role: "Data Analyst",
+    department: "Analytics",
+    phone: "+1 (555) 123-4567",
+    bio: "Experienced data analyst focused on customer insights and churn prediction.",
   });
 
   const [notifications, setNotifications] = useState({
@@ -27,37 +51,39 @@ export default function Settings() {
     weeklyReports: true,
     churnAlerts: true,
     salesAlerts: false,
-    systemUpdates: true
+    systemUpdates: true,
   });
 
   const [preferences, setPreferences] = useState({
-    theme: 'system',
-    language: 'en',
-    timezone: 'America/New_York',
-    dateFormat: 'MM/DD/YYYY',
-    currency: 'USD'
+    theme: theme,
+    dateFormat: "MM/DD/YYYY",
+    currency: "USD",
   });
 
   const [security, setSecurity] = useState({
     twoFactorAuth: false,
-    sessionTimeout: '60',
-    loginAlerts: true
+    sessionTimeout: "60",
+    loginAlerts: true,
   });
 
   const handleProfileChange = (field: string, value: string) => {
-    setProfile(prev => ({ ...prev, [field]: value }));
+    setProfile((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleNotificationChange = (field: string, value: boolean) => {
-    setNotifications(prev => ({ ...prev, [field]: value }));
+    setNotifications((prev) => ({ ...prev, [field]: value }));
   };
 
   const handlePreferenceChange = (field: string, value: string) => {
-    setPreferences(prev => ({ ...prev, [field]: value }));
+    setPreferences((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSecurityChange = (field: string, value: boolean | string) => {
-    setSecurity(prev => ({ ...prev, [field]: value }));
+    setSecurity((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSavePreferences = () => {
+    setTheme(preferences.theme as "light" | "dark" | "system");
   };
 
   return (
@@ -102,54 +128,64 @@ export default function Settings() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
-                    <Input 
+                    <Input
                       id="name"
                       value={profile.name}
-                      onChange={(e) => handleProfileChange('name', e.target.value)}
+                      onChange={(e) =>
+                        handleProfileChange("name", e.target.value)
+                      }
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email Address</Label>
-                    <Input 
+                    <Input
                       id="email"
                       type="email"
                       value={profile.email}
-                      onChange={(e) => handleProfileChange('email', e.target.value)}
+                      onChange={(e) =>
+                        handleProfileChange("email", e.target.value)
+                      }
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="role">Job Title</Label>
-                    <Input 
+                    <Input
                       id="role"
                       value={profile.role}
-                      onChange={(e) => handleProfileChange('role', e.target.value)}
+                      onChange={(e) =>
+                        handleProfileChange("role", e.target.value)
+                      }
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="department">Department</Label>
-                    <Input 
+                    <Input
                       id="department"
                       value={profile.department}
-                      onChange={(e) => handleProfileChange('department', e.target.value)}
+                      onChange={(e) =>
+                        handleProfileChange("department", e.target.value)
+                      }
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone">Phone Number</Label>
-                    <Input 
+                    <Input
                       id="phone"
                       value={profile.phone}
-                      onChange={(e) => handleProfileChange('phone', e.target.value)}
+                      onChange={(e) =>
+                        handleProfileChange("phone", e.target.value)
+                      }
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="bio">Bio</Label>
-                  <Textarea 
+                  <Textarea
                     id="bio"
                     placeholder="Tell us about yourself..."
                     value={profile.bio}
-                    onChange={(e) => handleProfileChange('bio', e.target.value)}
+                    onChange={(e) => handleProfileChange("bio", e.target.value)}
                     rows={3}
                   />
                 </div>
@@ -181,9 +217,11 @@ export default function Settings() {
                         Receive email notifications for important updates
                       </div>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={notifications.emailAlerts}
-                      onCheckedChange={(value) => handleNotificationChange('emailAlerts', value)}
+                      onCheckedChange={(value) =>
+                        handleNotificationChange("emailAlerts", value)
+                      }
                     />
                   </div>
 
@@ -194,9 +232,11 @@ export default function Settings() {
                         Get browser notifications for real-time alerts
                       </div>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={notifications.pushNotifications}
-                      onCheckedChange={(value) => handleNotificationChange('pushNotifications', value)}
+                      onCheckedChange={(value) =>
+                        handleNotificationChange("pushNotifications", value)
+                      }
                     />
                   </div>
 
@@ -209,9 +249,11 @@ export default function Settings() {
                         Receive weekly analytics summary via email
                       </div>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={notifications.weeklyReports}
-                      onCheckedChange={(value) => handleNotificationChange('weeklyReports', value)}
+                      onCheckedChange={(value) =>
+                        handleNotificationChange("weeklyReports", value)
+                      }
                     />
                   </div>
 
@@ -222,9 +264,11 @@ export default function Settings() {
                         Alert when customers enter high-risk status
                       </div>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={notifications.churnAlerts}
-                      onCheckedChange={(value) => handleNotificationChange('churnAlerts', value)}
+                      onCheckedChange={(value) =>
+                        handleNotificationChange("churnAlerts", value)
+                      }
                     />
                   </div>
 
@@ -235,9 +279,11 @@ export default function Settings() {
                         Notifications for significant sales changes
                       </div>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={notifications.salesAlerts}
-                      onCheckedChange={(value) => handleNotificationChange('salesAlerts', value)}
+                      onCheckedChange={(value) =>
+                        handleNotificationChange("salesAlerts", value)
+                      }
                     />
                   </div>
 
@@ -248,9 +294,11 @@ export default function Settings() {
                         Information about new features and updates
                       </div>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={notifications.systemUpdates}
-                      onCheckedChange={(value) => handleNotificationChange('systemUpdates', value)}
+                      onCheckedChange={(value) =>
+                        handleNotificationChange("systemUpdates", value)
+                      }
                     />
                   </div>
                 </div>
@@ -278,7 +326,12 @@ export default function Settings() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label>Theme</Label>
-                  <Select value={preferences.theme} onValueChange={(value) => handlePreferenceChange('theme', value)}>
+                  <Select
+                    value={theme}
+                    onValueChange={(value) =>
+                      handlePreferenceChange("theme", value)
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select theme" />
                     </SelectTrigger>
@@ -290,37 +343,7 @@ export default function Settings() {
                   </Select>
                 </div>
 
-                <div className="space-y-2">
-                  <Label>Language</Label>
-                  <Select value={preferences.language} onValueChange={(value) => handlePreferenceChange('language', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select language" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="en">English</SelectItem>
-                      <SelectItem value="es">Spanish</SelectItem>
-                      <SelectItem value="fr">French</SelectItem>
-                      <SelectItem value="de">German</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Timezone</Label>
-                  <Select value={preferences.timezone} onValueChange={(value) => handlePreferenceChange('timezone', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select timezone" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="America/New_York">Eastern Time</SelectItem>
-                      <SelectItem value="America/Chicago">Central Time</SelectItem>
-                      <SelectItem value="America/Denver">Mountain Time</SelectItem>
-                      <SelectItem value="America/Los_Angeles">Pacific Time</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <Button className="w-full">
+                <Button className="w-full" onClick={handleSavePreferences}>
                   <Save className="w-4 h-4 mr-2" />
                   Save Preferences
                 </Button>
@@ -345,15 +368,22 @@ export default function Settings() {
                       Add extra security to your account
                     </div>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={security.twoFactorAuth}
-                    onCheckedChange={(value) => handleSecurityChange('twoFactorAuth', value)}
+                    onCheckedChange={(value) =>
+                      handleSecurityChange("twoFactorAuth", value)
+                    }
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label>Session Timeout (minutes)</Label>
-                  <Select value={security.sessionTimeout} onValueChange={(value) => handleSecurityChange('sessionTimeout', value)}>
+                  <Select
+                    value={security.sessionTimeout}
+                    onValueChange={(value) =>
+                      handleSecurityChange("sessionTimeout", value)
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select timeout" />
                     </SelectTrigger>
@@ -373,9 +403,11 @@ export default function Settings() {
                       Get notified of new login attempts
                     </div>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={security.loginAlerts}
-                    onCheckedChange={(value) => handleSecurityChange('loginAlerts', value)}
+                    onCheckedChange={(value) =>
+                      handleSecurityChange("loginAlerts", value)
+                    }
                   />
                 </div>
 
