@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, Filter, Download, Eye } from "lucide-react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { useNavigate } from "react-router-dom";
 
 interface Customer {
@@ -96,6 +105,12 @@ export default function Customers() {
   const [searchTerm, setSearchTerm] = useState("");
   const [riskFilter, setRiskFilter] = useState("all");
   const [regionFilter, setRegionFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, riskFilter, regionFilter]);
 
   const filteredCustomers = mockCustomers.filter((customer) => {
     const matchesSearch =
@@ -110,6 +125,12 @@ export default function Customers() {
 
     return matchesSearch && matchesRisk && matchesRegion;
   });
+
+  const totalPages = Math.ceil(filteredCustomers.length / pageSize);
+  const paginatedCustomers = filteredCustomers.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   const getRiskBadgeStyles = (risk: string) => {
     switch (risk) {
@@ -183,14 +204,16 @@ export default function Customers() {
 
         {/* Results Summary */}
         <div className="text-sm text-muted-foreground">
-          Showing {filteredCustomers.length} of {mockCustomers.length} customers
+          Showing {(currentPage - 1) * pageSize + 1}–
+          {Math.min(currentPage * pageSize, filteredCustomers.length)} of{" "}
+          {filteredCustomers.length} customers
         </div>
 
         {/* Customers Table */}
         <div className="rounded-lg border border-border overflow-hidden">
           <Table>
             <TableHeader>
-              <TableRow className="bg-muted/50">
+              <TableRow className="bg-muted/50 sticky top-0 z-10">
                 <TableHead className="font-semibold">Customer</TableHead>
                 <TableHead className="font-semibold">Churn Risk</TableHead>
                 <TableHead className="font-semibold">Segment</TableHead>
@@ -201,7 +224,7 @@ export default function Customers() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredCustomers.map((customer) => (
+              {paginatedCustomers.map((customer) => (
                 <TableRow
                   key={customer.id}
                   className="hover:bg-muted/30 transition-colors cursor-pointer"
@@ -276,6 +299,76 @@ export default function Customers() {
               ))}
             </TableBody>
           </Table>
+        </div>
+
+        {/* Pagination */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-muted-foreground">
+              Rows per page:
+            </span>
+            <Select
+              value={pageSize.toString()}
+              onValueChange={(value) => {
+                setPageSize(Number(value));
+                setCurrentPage(1);
+              }}
+            >
+              <SelectTrigger className="w-20">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="25">25</SelectItem>
+                <SelectItem value="50">50</SelectItem>
+                <SelectItem value="100">100</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                  className={
+                    currentPage === 1
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }
+                />
+              </PaginationItem>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <PaginationItem key={page}>
+                    <PaginationLink
+                      onClick={() => setCurrentPage(page)}
+                      isActive={currentPage === page}
+                      className={
+                        currentPage === page
+                          ? "bg-primary text-primary-foreground"
+                          : "cursor-pointer"
+                      }
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                )
+              )}
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() =>
+                    setCurrentPage(Math.min(totalPages, currentPage + 1))
+                  }
+                  className={
+                    currentPage === totalPages
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       </div>
     </DashboardLayout>
