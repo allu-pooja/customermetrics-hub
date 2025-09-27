@@ -88,28 +88,15 @@ export class DataService {
       return errors;
     }
 
-    // Check for required columns
-    const requiredColumns = [
-      "order_id",
+    // Check for essential columns (not all are required, but these are recommended)
+    const essentialColumns = [
       "customer_id",
-      "age",
-      "gender",
-      "product_id",
-      "country",
-      "signup_date",
-      "last_purchase_date",
-      "cancellations_count",
-      "subscription_status",
-      "unit_price",
-      "quantity",
-      "purchase_frequency",
       "product_name",
       "category",
-      "ratings",
     ];
 
     const columns = Object.keys(jsonData[0]);
-    const missingColumns = requiredColumns.filter(
+    const missingEssentialColumns = essentialColumns.filter(
       (col) =>
         !columns.some(
           (c) =>
@@ -117,8 +104,8 @@ export class DataService {
         )
     );
 
-    if (missingColumns.length > 0) {
-      errors.push(`• Missing required columns: ${missingColumns.join(", ")}`);
+    if (missingEssentialColumns.length > 0) {
+      errors.push(`• Missing essential columns (recommended): ${missingEssentialColumns.join(", ")}`);
     }
 
     // Check for empty columns
@@ -145,7 +132,7 @@ export class DataService {
       errors.push(`• Found ${emptyRowsCount} completely empty row(s)`);
     }
 
-    // Check data completeness in critical fields
+    // Check data completeness in critical fields (only if they exist)
     const criticalFields = [
       "customer_id",
       "product_name",
@@ -171,7 +158,7 @@ export class DataService {
         }).length;
         const nullPercentage = (nullCount / jsonData.length) * 100;
 
-        if (nullPercentage > 20) {
+        if (nullPercentage > 50) { // Increased threshold for more flexibility
           completenessIssues.push(
             `${field}: ${nullPercentage.toFixed(1)}% empty`
           );
@@ -185,7 +172,7 @@ export class DataService {
       );
     }
 
-    // Column-wise data type validation
+    // Column-wise data type validation (only for columns that exist)
     const dataTypeErrors = this.validateDataTypes(jsonData, columns);
     errors.push(...dataTypeErrors);
 
@@ -198,7 +185,7 @@ export class DataService {
   ): string[] {
     const errors: string[] = [];
 
-    // Define validation rules for different column types
+    // Define validation rules for different column types (only validate if column exists)
     const numericColumns = [
       "age",
       "cancellations_count",
@@ -222,7 +209,7 @@ export class DataService {
       ],
     };
 
-    // Check numeric columns
+    // Check numeric columns (only if they exist)
     numericColumns.forEach((col) => {
       const colName = columns.find(
         (c) => c.toLowerCase().replace(/[^a-z0-9]/g, "_") === col.toLowerCase()
@@ -258,7 +245,7 @@ export class DataService {
       }
     });
 
-    // Check date columns
+    // Check date columns (only if they exist)
     dateColumns.forEach((col) => {
       const colName = columns.find(
         (c) => c.toLowerCase().replace(/[^a-z0-9]/g, "_") === col.toLowerCase()
@@ -287,7 +274,7 @@ export class DataService {
       }
     });
 
-    // Check categorical columns
+    // Check categorical columns (only if they exist)
     Object.entries(categoricalColumns).forEach(([col, validValues]) => {
       const colName = columns.find(
         (c) => c.toLowerCase().replace(/[^a-z0-9]/g, "_") === col.toLowerCase()

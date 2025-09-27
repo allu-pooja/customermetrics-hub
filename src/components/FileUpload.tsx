@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { DataService } from "../services/dataService";
 import { CustomerData } from "../types";
+import { toast } from "sonner";
 
 interface FileUploadProps {
   onDataUploaded: (data: CustomerData[]) => void;
@@ -20,6 +21,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
 }) => {
   const [dragActive, setDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [previewData, setPreviewData] = useState<CustomerData[]>([]);
   const [showPreview, setShowPreview] = useState(false);
@@ -71,11 +73,48 @@ const FileUpload: React.FC<FileUploadProps> = ({
     }
   };
 
-  const confirmUpload = () => {
-    const allData = DataService.getData();
-    onDataUploaded(allData);
-    setShowPreview(false);
-    setPreviewData([]);
+  const confirmUpload = async () => {
+    setSaving(true);
+    setError("");
+
+    try {
+      // Get the processed data
+      const allData = DataService.getData();
+
+      // Create FormData to send the file
+      const formData = new FormData();
+
+      // We need the original file, but we don't have it here
+      // Instead, we'll send the processed data as JSON
+      const apiResponse = await fetch('http://localhost:3001/api/upload-customer-data-json', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data: allData }),
+      });
+
+      if (!apiResponse.ok) {
+        throw new Error('Failed to upload data to server');
+      }
+
+      const result = await apiResponse.json();
+
+      // Success toast
+      toast.success(result.message);
+
+      // Notify parent component
+      onDataUploaded(allData);
+
+      setShowPreview(false);
+      setPreviewData([]);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to save data to database";
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const cancelUpload = () => {
@@ -178,9 +217,10 @@ const FileUpload: React.FC<FileUploadProps> = ({
           </button>
           <button
             onClick={confirmUpload}
-            className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors"
+            disabled={saving}
+            className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Confirm & Process Data
+            {saving ? "Saving to Database..." : "Confirm & Process Data"}
           </button>
         </div>
       </div>
