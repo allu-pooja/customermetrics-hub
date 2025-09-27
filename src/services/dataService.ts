@@ -315,7 +315,7 @@ export class DataService {
             .replace(/_/g, " ")
             .replace(/\b\w/g, (l) => l.toUpperCase());
           errors.push(
-            `• ${columnDisplayName} column contains ${invalidCount} invalid value(s): ${invalidValues.join(
+            `• ${columnDisplayName} column contains invalid value(s): ${invalidValues.join(
               ", "
             )}${invalidCount > 3 ? "..." : ""}`
           );
